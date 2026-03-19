@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-interface Props {
+interface FilterProps {
   selectedRegion: string;
   selectedAmount: number;
   onSelectRegion: (region: string) => void;
@@ -16,28 +16,25 @@ export default function FilterQuiz({
   onSelectAmount,
   onApply,
   onClose,
-}: Props) {
+}: FilterProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Region</Text>
       <View style={styles.row}>
-        {[
-          "All",
-          "Europe",
-          "Asia",
-          "Americas",
-          "Africa",
-          "Oceania",
-          "Antarctic",
-        ].map((region) => (
-          <Pressable
-            key={region}
-            style={[styles.button, selectedRegion === region && styles.active]}
-            onPress={() => onSelectRegion(region)}
-          >
-            <Text>{region}</Text>
-          </Pressable>
-        ))}
+        {["All", "Europe", "Asia", "Americas", "Africa", "Oceania"].map(
+          (region) => (
+            <Pressable
+              key={region}
+              style={[
+                styles.button,
+                selectedRegion === region && styles.active,
+              ]}
+              onPress={() => onSelectRegion(region)}
+            >
+              <Text>{region}</Text>
+            </Pressable>
+          ),
+        )}
       </View>
 
       <Text style={styles.title}>How many flags?</Text>

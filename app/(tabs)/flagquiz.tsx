@@ -1,15 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { fetchCountries } from "../../api/countries";
 import FilterQuiz from "../../components/FilterQuiz";
 import FinishedScreen from "../../components/FinishedQuizScreen";
 import Spinner from "../../components/Spinner";
+import { useCountries } from "../../hooks/useCountries";
 import { useQuiz } from "../../hooks/useQuiz";
-import { Country } from "../../types/Country";
 
 export default function Flagquiz() {
-  const [countries, setCountries] = useState<Country[]>([]);
+  const { countries, loading, error } = useCountries();
   const [showFilter, setShowFilter] = useState(false);
 
   const [region, setRegion] = useState<string>("All");
@@ -33,16 +32,28 @@ export default function Flagquiz() {
   } = useQuiz(countries);
 
   useEffect(() => {
-    fetchCountries().then(setCountries);
-  }, []);
-
-  useEffect(() => {
     if (countries.length > 0) startQuiz(region, amount);
   }, [countries, region, amount]);
 
   useEffect(() => {
     if (current) generateQuestion();
   }, [current, quizCountries]);
+
+  if (loading) {
+    return (
+      <LinearGradient colors={["#4facfe", "#00f2fe"]} style={styles.container}>
+        <Spinner />
+      </LinearGradient>
+    );
+  }
+
+  if (error) {
+    return (
+      <LinearGradient colors={["#4facfe", "#00f2fe"]} style={styles.container}>
+        <Text>{error}</Text>
+      </LinearGradient>
+    );
+  }
 
   if (!current) return <Spinner />;
 
@@ -103,7 +114,7 @@ export default function Flagquiz() {
                 key={opt}
                 onPress={() => answer(opt)}
               >
-                <Text style={{ fontSize: 20 }}>{opt}</Text>
+                <Text style={{ fontSize: 20, textAlign: "center" }}>{opt}</Text>
               </Pressable>
             ))}
           </View>

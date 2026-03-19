@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Country } from "../types/Country";
 
 export function useQuiz(countries: Country[]) {
@@ -34,7 +34,9 @@ export function useQuiz(countries: Country[]) {
     setSelectedAnswer(null);
   };
 
-  const current = quizCountries[questionIndex];
+  const current = useMemo(() => {
+    return quizCountries[questionIndex];
+  }, [quizCountries, questionIndex]);
 
   const generateQuestion = () => {
     if (!current) return;

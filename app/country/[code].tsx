@@ -10,12 +10,32 @@ import { Country } from "../../types/Country";
 export default function CountryScreen() {
   const { code } = useLocalSearchParams();
   const [country, setCountry] = useState<Country | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!code) return;
+    if (typeof code !== "string") return;
+    setError(null);
 
-    fetchCountryByCode(code as string).then(setCountry);
+    fetchCountryByCode(code)
+      .then((data) => {
+        if (!data) {
+          setError("Country not found");
+        } else {
+          setCountry(data);
+        }
+      })
+      .catch(() => {
+        setError("Something went wrong");
+      });
   }, [code]);
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
 
   if (!country) {
     return (
@@ -27,11 +47,11 @@ export default function CountryScreen() {
 
   const languages = country.languages
     ? Object.values(country.languages).join(", ")
-    : "N/A";
+    : "not available";
 
   const currency = country.currencies
     ? Object.values(country.currencies)[0].name
-    : "N/A";
+    : "not available";
 
   return (
     <>
@@ -54,7 +74,7 @@ export default function CountryScreen() {
               ]}
             >
               <Text>Capital</Text>
-              <Text>{country.capital?.[0] ?? "N/A"}</Text>
+              <Text>{country.capital?.[0] ?? "not available"}</Text>
             </View>
             <View style={styles.category}>
               <Text>Region</Text>
@@ -62,7 +82,9 @@ export default function CountryScreen() {
             </View>
             <View style={styles.category}>
               <Text>Population</Text>
-              <Text>{country.population?.toLocaleString() ?? "N/A"}</Text>
+              <Text>
+                {country.population?.toLocaleString() ?? "not available"}
+              </Text>
             </View>
             <View style={styles.category}>
               <Text>Languages</Text>

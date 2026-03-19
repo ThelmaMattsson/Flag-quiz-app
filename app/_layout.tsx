@@ -3,11 +3,11 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Country } from "../types/Country";
 
-interface Props {
+interface CountryProps {
   country: Country;
 }
 
-export default function RootLayout({ country }: Props) {
+export default function RootLayout({ country }: CountryProps) {
   return (
     <>
       <StatusBar style="dark" />

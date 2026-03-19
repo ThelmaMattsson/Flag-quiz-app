@@ -1,12 +1,12 @@
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { StyleSheet, TextInput, View } from "react-native";
 
-interface Props {
+interface SearchProps {
   value: string;
   onChange: (text: string) => void;
 }
 
-export default function Search({ value, onChange }: Props) {
+export default function Search({ value, onChange }: SearchProps) {
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>

@@ -1,12 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-interface Props {
+interface FinishedScreenProps {
   score: number;
   quizLength: number;
   onClick: () => void;
 }
 
-export default function FinishedScreen({ score, quizLength, onClick }: Props) {
+export default function FinishedScreen({
+  score,
+  quizLength,
+  onClick,
+}: FinishedScreenProps) {
   return (
     <View style={styles.finishedContainer}>
       <Text style={styles.finishedText}>

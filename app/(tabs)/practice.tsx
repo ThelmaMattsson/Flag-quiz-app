@@ -1,5 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { useCallback } from "react";
 import {
   FlatList,
   Image,
@@ -16,6 +17,16 @@ export default function Practice() {
   const { query, search, shown, error, loading } = useCountries();
 
   const router = useRouter();
+
+  const handlePress = useCallback(
+    (code: string) => {
+      router.push({
+        pathname: "/country/[code]",
+        params: { code },
+      });
+    },
+    [router],
+  );
 
   if (loading) {
     return <Spinner />;
@@ -43,12 +54,7 @@ export default function Practice() {
           renderItem={({ item }) => (
             <Pressable
               style={styles.countryContainer}
-              onPress={() =>
-                router.push({
-                  pathname: "/country/[code]",
-                  params: { code: item.cca2 },
-                })
-              }
+              onPress={() => handlePress(item.cca2)}
             >
               <View
                 style={{
